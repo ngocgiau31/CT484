@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'products/products_grid.dart';
+import 'package:myshop/ui/screens.dart';
+import 'products_grid.dart';
+import '../shared/app_drawer.dart';
 
 enum FilterOptions { favorites, all }
 
@@ -7,10 +9,10 @@ class ProductsOverviewScreen extends StatefulWidget {
   const ProductsOverviewScreen({super.key});
 
   @override
-  State<ProductsOverviewScreen> createState() => _ProductsOverviewScreenState();
+  State<ProductsOverviewScreen> createState() => _ProductsOverviewScreen();
 }
 
-class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
+class _ProductsOverviewScreen extends State<ProductsOverviewScreen> {
   var _showOnlyFavorites = false;
 
   @override
@@ -18,11 +20,9 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('MyShop'),
-        actions: <Widget>[
-          buildProductFilterMenu(),
-          buildShoppingCartIcon(),
-        ],
+        actions: <Widget>[buildProductFilterMenu(), buildShoppingCartIcon()],
       ),
+      drawer: const AppDrawer(),
       body: ProductsGrid(_showOnlyFavorites),
     );
   }
@@ -33,7 +33,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         Icons.shopping_cart,
       ),
       onPressed: () {
-        print('Go to cart screen');
+        Navigator.of(context).pushNamed(CartScreen.routeName);
       },
     );
   }
@@ -59,8 +59,8 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         ),
         const PopupMenuItem(
           value: FilterOptions.all,
-          child: Text('Show ALL'),
-        ),
+          child: Text('Show All'),
+        )
       ],
     );
   }
