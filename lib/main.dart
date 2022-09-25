@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:myshop/ui/products/products_manager.dart';
-import 'ui/products/product_detail_screen.dart';
-import 'ui/product_overview_screen.dart';
-import 'ui/products/user_products_screen.dart';
-import 'ui/cart/cart_screen.dart';
-import 'ui/orders/orders_screen.dart';
+//import 'package:myshop/ui/orders/order_item_card.dart';
+//import 'package:myshop/ui/orders/order_manager.dart';
+//import 'package:myshop/ui/product_overview_screen.dart';
+//import 'package:myshop/ui/products/products_manager.dart';
+//import 'ui/products/product_detail_screen.dart';
+//import 'ui/product_overview_screen.dart';
+import 'package:myshop/ui/orders/orders_screen.dart';
+//import 'ui/cart/cart_screen.dart';
+import 'package:myshop/ui/products/user_products_screen.dart';
+import 'ui/screens.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -20,19 +25,34 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Lato',
-        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple,)
-        .copyWith(
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.purple,
+        ).copyWith(
           secondary: Colors.deepOrange,
         ),
-        
       ),
-      home: const SafeArea (
-        child: OrdersScreen(),
-      ),
+      home: const ProductsOverviewScreen(),
+       routes: {
+          CartScreen.routeName: (ctx) => const CartScreen(),
+          OrderScreen.routeName: (ctx) => const OrdersScreen(),
+          UserProductsScreen.routeName: (ctx) => const UserProductsScreen(),
+        },
+        onGenerateRoute: (settings) {
+          if (settings.name == ProductDetailScreen.routeName) {
+            final productId = settings.arguments as String;
+            return MaterialPageRoute(
+              builder: (ctx) {
+                return ProductDetailScreen(
+                  ProductsManager().findById(productId),
+                );
+              },
+            );
+          }
+          return null;
+      },
     );
   }
 }
-
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
